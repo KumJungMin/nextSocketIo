@@ -12,7 +12,12 @@ function Form() {
   );
 
   return (
-    <form onSubmit={(e) => handleSubmit(e)} className="flex flex-col gap-5">
+    <form
+      onSubmit={(event) =>
+        handleSubmit({ event, name: "ㅎ", email: "ㅎ", router, avatarId })
+      }
+      className="flex flex-col gap-5"
+    >
       <Avatar avatarId={avatarId} setAvatarId={setAvatarId} />
       <div className="flex flex-col xl:flex-row gap-5">
         <div className="form-control w-full">
