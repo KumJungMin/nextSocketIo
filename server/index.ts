@@ -3,6 +3,7 @@ import "dotenv/config";
 import http from "http";
 import cors from "cors";
 import mongoose from "mongoose";
+import userRouter from "./useRoutes";
 
 const app = express();
 const server = http.createServer(app);
@@ -21,3 +22,6 @@ db.once("open", () => {
     console.log(`Server is running on port ${PORT}`);
   });
 });
+
+// express의 라우터를 사용하여 요청을 처리함
+app.use("/", userRouter);
