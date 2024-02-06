@@ -1,5 +1,6 @@
 "use client";
 
+import type { FormEvent } from "react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { handleSubmit } from "@/lib/fetchers";
@@ -10,14 +11,22 @@ function Form() {
   const [avatarId, setAvatarId] = useState(
     Math.random().toString(36).substring(7)
   );
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+
+  function onSubmit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+
+    handleSubmit({
+      name,
+      email,
+      router,
+      avatarId,
+    });
+  }
 
   return (
-    <form
-      onSubmit={(event) =>
-        handleSubmit({ event, name: "ㅎ", email: "ㅎ", router, avatarId })
-      }
-      className="flex flex-col gap-5"
-    >
+    <form onSubmit={onSubmit} className="flex flex-col gap-5">
       <Avatar avatarId={avatarId} setAvatarId={setAvatarId} />
       <div className="flex flex-col xl:flex-row gap-5">
         <div className="form-control w-full">
@@ -26,8 +35,10 @@ function Form() {
           </label>
           <input
             type="text"
+            value={name}
             placeholder="이름"
             className="input input-bordered w-full"
+            onChange={(e) => setName(e.target.value)}
             required
           />
         </div>
@@ -38,7 +49,9 @@ function Form() {
           <input
             type="email"
             placeholder="이메일"
+            value={email}
             className="input input-bordered w-full"
+            onChange={(e) => setEmail(e.target.value)}
             required
           />
         </div>
