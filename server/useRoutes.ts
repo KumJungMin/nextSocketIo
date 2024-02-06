@@ -1,4 +1,5 @@
 import { Request, Response, Router } from "express";
+import jwt from "jsonwebtoken";
 import { User } from "./useModel";
 
 const router = Router();
@@ -9,7 +10,39 @@ router.post("/auth", async (req: Request, res: Response) => {
   const user = new User(req.body);
   try {
     await user.save();
+    // 헤더에 쿠키 설정하기
+    const accessToken = jwt.sign(
+      user.toObject(),
+      process.env.ACCESS_TOKEN_SECRET!
+    );
+    res.setHeader("Set-Cookie", `user=${accessToken}`);
     res.send(user);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
+router.get("/user", async (req: Request, res: Response) => {
+  try {
+    // verify는 토큰을 해독하는 함수
+    // 헤더에 있는 토큰을 해독하여 유저 정보를 가져옴
+    const data = jwt.verify(
+      req.headers.authorization!,
+      process.env.ACCESS_TOKEN_SECRET!
+    );
+
+    // 토큰에 있는 이메일 정보를 사용하여 DB에서 유저 정보를 가져옴
+    const user = await User.find({ email: data?.email });
+    res.send(user);
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+router.get("/users", async (req: Request, res: Response) => {
+  try {
+    const users = await User.find();
+    res.send(users);
   } catch (error) {
     res.status(500).send(error);
   }

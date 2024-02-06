@@ -2,19 +2,16 @@ import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.share
 import { FormEvent } from "react";
 
 export async function handleSubmit({
-  event,
   name,
   email,
   router,
   avatarId,
 }: {
-  event: FormEvent<HTMLFormElement>;
   name: string;
   email: string;
   router: AppRouterInstance;
   avatarId: string;
 }) {
-  event.preventDefault();
   try {
     await fetch("/auth", {
       method: "POST",
@@ -28,8 +25,23 @@ export async function handleSubmit({
       },
     });
     // socket.emit("joined", "new user");
-    // router.push("/chat");
+    router.push("/chat");
   } catch (error) {
     console.error(error);
   }
+}
+
+export async function fetchUser(
+  cookie: { user?: any },
+  setUser: { (user: any): void; (arg: any): void }
+) {
+  const accessToken = cookie.user;
+  const response = await fetch("/user", {
+    method: "GET",
+    headers: {
+      Authorization: `${accessToken}`,
+    },
+  });
+  const user = await response.json();
+  setUser(user[0]);
 }
