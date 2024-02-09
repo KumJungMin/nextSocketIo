@@ -5,7 +5,7 @@ import React, { useEffect } from "react";
 import { useCookies } from "react-cookie";
 import { shallow } from "zustand/shallow";
 import SearchBar from "./SearchBar";
-// import ChatList from "./ChatList";
+import ChatList from "./ChatList";
 
 function Sidebar() {
   // useCookies는 쿠키를 사용할 수 있게 해주는 hook입니다.
@@ -29,10 +29,8 @@ function Sidebar() {
 
   return (
     <div className="w-full md:!block sidebar z-10 border-r-2 border-slate-400  md:w-1/2 lg:w-1/3 p-3 bg-white h-screen">
-      {/* SEARCHBAR */}
       <SearchBar user={myUser} />
-      {/* CHATLIST */}
-      {/* {myUser && <ChatList mySelf={myUser} />} */}
+      {myUser && <ChatList mySelf={myUser} />}
     </div>
   );
 }
