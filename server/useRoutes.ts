@@ -48,4 +48,14 @@ router.get("/users", async (req: Request, res: Response) => {
   }
 });
 
+router.get("/messages", async (req: Request, res: Response) => {
+  const { sender, receiver } = req.query;
+  const user = await User.findOne({ email: receiver });
+  const filteredUser = user?.messages?.filter((message: any) => {
+    return message.sender === sender;
+  });
+  console.log("filteredUser", filteredUser);
+  res.send(filteredUser);
+});
+
 export default router;
