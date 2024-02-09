@@ -6,11 +6,13 @@ export async function handleSubmit({
   email,
   router,
   avatarId,
+  socket,
 }: {
   name: string;
   email: string;
   router: AppRouterInstance;
   avatarId: string;
+  socket: any;
 }) {
   try {
     await fetch("/auth", {
@@ -24,7 +26,7 @@ export async function handleSubmit({
         "Content-Type": "application/json",
       },
     });
-    // socket.emit("joined", "new user");
+    socket.emit("joined", "new user");
     router.push("/chat");
   } catch (error) {
     console.error(error);

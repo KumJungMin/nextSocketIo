@@ -1,9 +1,12 @@
 "use client";
 
 import type { FormEvent } from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { io } from "socket.io-client";
+import { useCookies } from "react-cookie";
 import { useRouter } from "next/navigation";
 import { handleSubmit } from "@/lib/fetchers";
+
 import Avatar from "./Avatar";
 
 function Form() {
@@ -14,6 +17,14 @@ function Form() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
 
+  const socket = io("http://localhost:4000");
+  const [cookie] = useCookies(["user"]);
+  useEffect(() => {
+    if (cookie.user) {
+      router.push("/chat");
+    }
+  }, [cookie.user]);
+
   function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
@@ -22,6 +33,7 @@ function Form() {
       email,
       router,
       avatarId,
+      socket,
     });
   }
 
