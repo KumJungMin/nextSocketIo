@@ -1,5 +1,4 @@
 import { userProps } from "@/types";
-import { SearchIcon } from "@/utils/icons";
 import Image from "next/image";
 import React from "react";
 
@@ -23,7 +22,7 @@ export default function SearchBar({ user }: { user: userProps }) {
           className="input pl-12 rounded-full input-bordered w-full bg-gray-100 placeholder:text-gray-500"
         />
         <div className="w-6 h-6 absolute top-1/2 left-5 -translate-x-1/2 -translate-y-1/2">
-          <SearchIcon />
+          검색
         </div>
       </div>
     </div>
