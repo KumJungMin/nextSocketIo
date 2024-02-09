@@ -29,7 +29,7 @@ router.get("/user", async (req: Request, res: Response) => {
     const data = jwt.verify(
       req.headers.authorization!,
       process.env.ACCESS_TOKEN_SECRET!
-    );
+    ) as jwt.JwtPayload;
 
     // 토큰에 있는 이메일 정보를 사용하여 DB에서 유저 정보를 가져옴
     const user = await User.find({ email: data?.email });
