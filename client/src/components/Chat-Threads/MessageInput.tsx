@@ -1,10 +1,14 @@
 "use client";
 import { useSelectedUser } from "@/store/userStore";
+import type { FormEvent } from "react";
 import dynamic from "next/dynamic";
 import React, { useState } from "react";
 import { useCookies } from "react-cookie";
 import { io } from "socket.io-client";
 
+// dynamic은 코드 스플리팅을 위한 next.js의 함수
+// Picker는 emoji-picker-react 라이브러리를 사용하기 위해 동적으로 import
+// ssr을 false 설정하여, 서버사이드 렌더링을 사용하지 않도록 설정
 const Picker = dynamic(
   () => {
     return import("emoji-picker-react");
@@ -12,14 +16,15 @@ const Picker = dynamic(
   { ssr: false }
 );
 
-function MessageInp() {
-  const [inpValue, setInpValue] = useState<string>("");
-  const [showEmojies, setShowEmojies] = useState<boolean>(false);
+function MessageInput() {
+  const [inpValue, setInpValue] = useState("");
+  const [showEmojies, setShowEmojies] = useState(false);
   const selectedUser = useSelectedUser((state) => state.selectedUser);
-  const [cookie, setCookie] = useCookies(["user"]);
+  const [cookie] = useCookies(["user"]);
+
   const socket = io("http://localhost:4000");
 
-  function handleSubmit(e: { preventDefault: () => void }) {
+  function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     socket.emit("private message", selectedUser.email, inpValue, cookie.user);
     setInpValue("");
@@ -62,4 +67,4 @@ function MessageInp() {
   );
 }
 
-export default MessageInp;
+export default MessageInput;
